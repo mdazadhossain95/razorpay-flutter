@@ -9,12 +9,10 @@ import java.util.Map;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
-import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 /**
  * RazorpayFlutterPlugin
@@ -25,19 +23,10 @@ public class RazorpayFlutterPlugin implements FlutterPlugin, MethodCallHandler, 
     private ActivityPluginBinding pluginBinding;
     private static String CHANNEL_NAME = "razorpay_flutter";
     Map<String, Object> _arguments;
-    String customerMobile ;
+    String customerMobile;
     String color;
 
-
     public RazorpayFlutterPlugin() {
-    }
-
-    /**
-     * Plugin registration for Flutter version < 1.12
-     */
-    public static void registerWith(Registrar registrar) {
-        final MethodChannel channel = new MethodChannel(registrar.messenger(), CHANNEL_NAME);
-        channel.setMethodCallHandler(new RazorpayFlutterPlugin(registrar));
     }
 
     @Override
@@ -50,29 +39,16 @@ public class RazorpayFlutterPlugin implements FlutterPlugin, MethodCallHandler, 
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
     }
 
-
-    /**
-     * Constructor for Flutter version < 1.12
-     * @param registrar
-     */
-    private RazorpayFlutterPlugin(Registrar registrar) {
-        this.razorpayDelegate = new RazorpayDelegate(registrar.activity());
-        registrar.addActivityResultListener(razorpayDelegate);
-    }
-
     @Override
     @SuppressWarnings("unchecked")
     public void onMethodCall(MethodCall call, Result result) {
-
-
         switch (call.method) {
-
             case "open":
                 razorpayDelegate.openCheckout((Map<String, Object>) call.arguments, result);
                 break;
 
             case "setPackageName":
-                razorpayDelegate.setPackageName((String)call.arguments);
+                razorpayDelegate.setPackageName((String) call.arguments);
                 break;
 
             case "resync":
@@ -81,29 +57,30 @@ public class RazorpayFlutterPlugin implements FlutterPlugin, MethodCallHandler, 
 
             case "setKeyID":
                 String key = call.arguments().toString();
-                razorpayDelegate.setKeyID(key,  result);
+                razorpayDelegate.setKeyID(key, result);
                 break;
+
             case "linkNewUpiAccount":
                 _arguments = call.arguments();
                 customerMobile = (String) _arguments.get("customerMobile");
                 color = (String) _arguments.get("color");
-                razorpayDelegate.linkNewUpiAccount(customerMobile, color , result);
+                razorpayDelegate.linkNewUpiAccount(customerMobile, color, result);
                 break;
 
             case "manageUpiAccounts":
                 _arguments = call.arguments();
                 customerMobile = (String) _arguments.get("customerMobile");
                 color = (String) _arguments.get("color");
-                razorpayDelegate.manageUpiAccounts(customerMobile, color , result);
+                razorpayDelegate.manageUpiAccounts(customerMobile, color, result);
                 break;
+
             case "isTurboPluginAvailable":
                 razorpayDelegate.isTurboPluginAvailable(result);
                 break;
+
             default:
                 result.notImplemented();
-
         }
-
     }
 
     @Override
