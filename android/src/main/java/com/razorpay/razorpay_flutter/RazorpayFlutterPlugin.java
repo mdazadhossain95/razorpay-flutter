@@ -22,6 +22,7 @@ public class RazorpayFlutterPlugin implements FlutterPlugin, MethodCallHandler, 
     private RazorpayDelegate razorpayDelegate;
     private ActivityPluginBinding pluginBinding;
     private static String CHANNEL_NAME = "razorpay_flutter";
+    private MethodChannel channel;
     Map<String, Object> _arguments;
     String customerMobile;
     String color;
@@ -31,12 +32,13 @@ public class RazorpayFlutterPlugin implements FlutterPlugin, MethodCallHandler, 
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
-        final MethodChannel channel = new MethodChannel(binding.getBinaryMessenger(), CHANNEL_NAME);
+        channel = new MethodChannel(binding.getBinaryMessenger(), CHANNEL_NAME);
         channel.setMethodCallHandler(this);
     }
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+        channel.setMethodCallHandler(null);
     }
 
     @Override
