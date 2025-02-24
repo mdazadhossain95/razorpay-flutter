@@ -1,3 +1,10 @@
+package android
+
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
 group = "com.razorpay.razorpay_flutter"
 version = "1.1.4"
 
@@ -21,21 +28,22 @@ allprojects {
     }
 }
 
-apply plugin: "com.android.library"
-apply plugin: "kotlin-android"
-
 android {
     namespace = "com.razorpay.razorpay_flutter"
+    compileSdk = 34
 
-    compileSdk = 35
+    defaultConfig {
+        minSdk = 21
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11
+        jvmTarget = "17"
     }
 
     sourceSets {
@@ -43,27 +51,13 @@ android {
         test.java.srcDirs += "src/test/kotlin"
     }
 
-    defaultConfig {
-        minSdk = 21
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
     lintOptions {
         disable "InvalidPackage"
-    }
-
-    dependencies {
-        implementation fileTree(dir: "libs", include: ["*.jar"])
-        api "com.razorpay:checkout:1.6.+"
-        implementation "com.google.code.gson:gson:2.8.8"
-        testImplementation("org.jetbrains.kotlin:kotlin-test")
-        testImplementation("org.mockito:mockito-core:5.0.0")
     }
 
     testOptions {
         unitTests.all {
             useJUnitPlatform()
-
             testLogging {
                 events "passed", "skipped", "failed", "standardOut", "standardError"
                 outputs.upToDateWhen { false }
@@ -71,4 +65,13 @@ android {
             }
         }
     }
+}
+
+// ✅ Move dependencies outside `android` block
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    api "com.razorpay:checkout:1.6.+"
+    implementation "com.google.code.gson:gson:2.8.8"
+    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation("org.mockito:mockito-core:5.0.0")
 }
