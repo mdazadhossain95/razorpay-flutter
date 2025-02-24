@@ -30,7 +30,7 @@ allprojects {
 
 android {
     namespace = "com.razorpay.razorpay_flutter"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 21
